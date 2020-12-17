@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='python-test',
-    version='0.0.1',
+    version='0.0.3',
     author='Tyler Bailey',
     packages=['python_test'],
 )
