@@ -10,6 +10,10 @@ jobs:
     name: Create python distribution for release
     runs-on: ubuntu-latest
     steps:
+      - name: Dump Github Context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Setup Python 2.7
         uses: actions/setup-python@v1
         with:
