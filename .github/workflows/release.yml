@@ -22,6 +22,9 @@ jobs:
           make egg
           egg=$(ls dist/)
           echo "::set-output name=egg::$egg"
+      - name: Extract release notes
+        id: release_notes
+        uses: ffurrer2/extract-release-notes@v1
       - name: Determine Release Type
         id: release_type
         run: |
@@ -42,6 +45,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: ${{ steps.release_type.outputs.prerelease }}
+          body: ${{ steps.release_notes.outputs.release_notes }}
       - name: Upload Assets
         id: upload_asset
         uses: actions/upload-release-asset@v1
