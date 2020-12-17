@@ -1,0 +1,39 @@
+name: Create pre-release on version tag
+
+on:
+  push:
+    tags:
+      - 'v0.\d\.\d'
+
+jobs:
+  build-and-release:
+    name: Create python distribution for release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python 2.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 2.7.18
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Egg
+        run: >-
+          make egg
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: true
+      - name: Upload Assets
+        id: upload_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: '["./dist/*.egg"]'
