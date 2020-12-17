@@ -1,9 +1,9 @@
-name: Create pre-release on version tag
+name: Create release on version tag
 
 on:
   push:
     tags:
-      - 'v0.\d\.\d'
+      - 'v\d\.\d\.\d'
 
 jobs:
   build-and-release:
@@ -26,6 +26,12 @@ jobs:
         id: release_type
         run: |
           tag=$(echo ${{ github.ref }} | cut -d/ -f3)
+          if [[ ${tag} =~ ^v0\. ]]; then
+            prerelease="true"
+          else
+            prerelease="false"
+          fi
+          echo "::set-output name=prerelease::$prerelease"
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -35,7 +41,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
-          prerelease: "true"
+          prerelease: ${{ steps.release_type.outputs.prerelease }}
       - name: Upload Assets
         id: upload_asset
         uses: actions/upload-release-asset@v1
