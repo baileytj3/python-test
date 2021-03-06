@@ -12,6 +12,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: markdownlint
-      uses: nosborn/github-action-markdown-cli@v1
+      uses: nosborn/github-action-markdown-cli@v1.1.1
       with:
         files: .
