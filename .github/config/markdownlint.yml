@@ -1,0 +1,4 @@
+default: true
+
+MD013: false  # MD013/line-length
+MD024: false  # MD024/no-duplicate-heading/no-dupliecate-header
